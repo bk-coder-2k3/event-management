@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
+const BACKEND_INTERNAL_URL = process.env.BACKEND_INTERNAL_URL || 'http://localhost:5000';
+
 const nextConfig = {
   reactStrictMode: true,
+  transpilePackages: ['@kalyanaconnect/shared'],
   images: {
     remotePatterns: [
       {
@@ -21,11 +24,11 @@ const nextConfig = {
     return [
       {
         source: '/api/v1/:path*',
-        destination: 'http://localhost:5000/api/v1/:path*',
+        destination: `${BACKEND_INTERNAL_URL}/api/v1/:path*`,
       },
       {
         source: '/uploads/:path*',
-        destination: 'http://localhost:5000/uploads/:path*',
+        destination: `${BACKEND_INTERNAL_URL}/uploads/:path*`,
       },
     ];
   },
