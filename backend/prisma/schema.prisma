@@ -1,0 +1,282 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CUSTOMER
+  VENDOR
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DISABLED
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  VERIFIED
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  ACCEPTED
+  DECLINED
+  CLOSED
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id               String       @id @default(uuid())
+  fullName         String
+  email            String       @unique
+  phone            String?      @unique
+  passwordHash     String
+  role             Role         @default(CUSTOMER)
+  status           UserStatus   @default(ACTIVE)
+  emailVerifiedAt  DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  vendorProfile    Vendor?
+  enquiries        Enquiry[]
+  reviews          Review[]
+  savedVendors     SavedVendor[]
+  refreshSessions  RefreshSession[]
+  auditLogs        AuditLog[]
+  passwordResets   PasswordResetToken[]
+  emailTokens      EmailVerificationToken[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  name        String
+  slug        String    @unique
+  description String
+  icon        String?
+  isActive    Boolean   @default(true)
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  vendors     Vendor[]
+
+  @@index([slug])
+  @@index([isActive])
+}
+
+model Vendor {
+  id                 String             @id @default(uuid())
+  ownerUserId        String             @unique
+  businessName       String
+  slug               String             @unique
+  categoryId         String
+  description        String
+  startingPrice      Decimal?           @db.Decimal(12, 2)
+  currency           String             @default("INR")
+  address            String
+  city               String
+  district           String
+  state              String             @default("Tamil Nadu")
+  postalCode         String
+  phone              String?
+  whatsappPhone      String?
+  latitude           Float?
+  longitude          Float?
+  approvalStatus     ApprovalStatus     @default(PENDING)
+  verificationStatus VerificationStatus @default(UNVERIFIED)
+  rejectionReason    String?
+  approvedAt         DateTime?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  owner              User               @relation(fields: [ownerUserId], references: [id], onDelete: Cascade)
+  category           Category           @relation(fields: [categoryId], references: [id])
+  images             VendorImage[]
+  packages           ServicePackage[]
+  enquiries          Enquiry[]
+  reviews            Review[]
+  savedByCustomers   SavedVendor[]
+
+  @@index([slug])
+  @@index([district])
+  @@index([city])
+  @@index([approvalStatus])
+  @@index([verificationStatus])
+  @@index([categoryId])
+  @@index([startingPrice])
+}
+
+model VendorImage {
+  id         String   @id @default(uuid())
+  vendorId   String
+  imageUrl   String
+  storageKey String
+  altText    String?
+  sortOrder  Int      @default(0)
+  createdAt  DateTime @default(now())
+
+  vendor     Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+
+  @@index([vendorId])
+}
+
+model ServicePackage {
+  id          String   @id @default(uuid())
+  vendorId    String
+  name        String
+  description String
+  price       Decimal  @db.Decimal(12, 2)
+  currency    String   @default("INR")
+  inclusions  String[]
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  vendor      Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+
+  @@index([vendorId])
+  @@index([isActive])
+}
+
+model Enquiry {
+  id             String        @id @default(uuid())
+  customerUserId String?
+  vendorId       String
+  customerName   String
+  customerEmail  String
+  customerPhone  String
+  eventDate      DateTime?
+  eventCity      String
+  budgetMin      Decimal?      @db.Decimal(12, 2)
+  budgetMax      Decimal?      @db.Decimal(12, 2)
+  requirements   String
+  status         EnquiryStatus @default(NEW)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  customer       User?         @relation(fields: [customerUserId], references: [id], onDelete: SetNull)
+  vendor         Vendor        @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+
+  @@index([customerUserId])
+  @@index([vendorId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Review {
+  id               String       @id @default(uuid())
+  vendorId         String
+  customerUserId   String
+  rating           Int
+  comment          String
+  moderationStatus ReviewStatus @default(PENDING)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  vendor           Vendor       @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  customer         User         @relation(fields: [customerUserId], references: [id], onDelete: Cascade)
+
+  @@unique([vendorId, customerUserId])
+  @@index([vendorId])
+  @@index([customerUserId])
+  @@index([moderationStatus])
+}
+
+model SavedVendor {
+  id             String   @id @default(uuid())
+  customerUserId String
+  vendorId       String
+  createdAt      DateTime @default(now())
+
+  customer       User     @relation(fields: [customerUserId], references: [id], onDelete: Cascade)
+  vendor         Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+
+  @@unique([customerUserId, vendorId])
+  @@index([customerUserId])
+  @@index([vendorId])
+}
+
+model RefreshSession {
+  id                  String    @id @default(uuid())
+  userId              String
+  tokenHash           String
+  expiresAt           DateTime
+  revokedAt           DateTime?
+  replacedBySessionId String?
+  createdAt           DateTime  @default(now())
+
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid())
+  userId    String
+  tokenHash String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+}
+
+model EmailVerificationToken {
+  id        String    @id @default(uuid())
+  userId    String
+  tokenHash String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?
+  action     String
+  entityType String
+  entityId   String
+  details    Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@index([action])
+  @@index([createdAt])
+}
