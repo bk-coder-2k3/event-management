@@ -81,6 +81,7 @@ export interface VendorPublicSummary {
   description: string;
   startingPrice: number | string | null;
   currency: string;
+  attributes?: Record<string, any> | null;
   address: string;
   city: string;
   district: TamilNaduDistrict | string;
@@ -111,6 +112,7 @@ export interface EnquirySummary {
   customerName: string;
   customerEmail: string;
   customerPhone: string;
+  eventType?: string | null;
   eventDate?: string | Date | null;
   eventCity: string;
   budgetMin?: number | string | null;

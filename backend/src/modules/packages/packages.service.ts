@@ -1,6 +1,6 @@
 import { prisma } from '../../config/db';
 import { ForbiddenError, NotFoundError } from '../../utils/errors';
-import { ROLES } from '@kalyanaconnect/shared';
+import { ROLES } from '@vizhaspace/shared';
 
 export class PackagesService {
   static async createPackage(vendorId: string, userId: string, userRole: string, data: any) {

@@ -71,11 +71,11 @@ export class CloudinaryStorageService implements IStorageService {
     });
   }
 
-  async uploadImage(file: Express.Multer.File, folder = 'kalyanaconnect'): Promise<UploadResult> {
+  async uploadImage(file: Express.Multer.File, folder = 'vizhaspace'): Promise<UploadResult> {
     return new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          folder: `kalyanaconnect/${folder}`,
+          folder: `vizhaspace/${folder}`,
           transformation: [{ quality: 'auto', fetch_format: 'auto' }],
         },
         (error, result) => {

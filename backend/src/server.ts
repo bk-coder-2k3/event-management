@@ -4,7 +4,7 @@ import { logger } from './config/logger';
 import { prisma } from './config/db';
 
 const server = app.listen(env.PORT, () => {
-  logger.info(`✨ KalyanaConnect Backend running on port ${env.PORT} in ${env.NODE_ENV} mode`);
+  logger.info(`✨ VizhaSpace (vizhaspace.in) Backend running on port ${env.PORT} in ${env.NODE_ENV} mode`);
   logger.info(`🔗 API Prefix: ${env.API_PREFIX}`);
   logger.info(`🌐 Allowed Origin: ${env.CLIENT_ORIGIN}`);
 });

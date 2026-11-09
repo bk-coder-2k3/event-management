@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { UsersController } from './users.controller';
 import { authenticateJwt } from '../../middleware/auth';
 import { requireRole } from '../../middleware/rbac';
-import { ROLES } from '@kalyanaconnect/shared';
+import { ROLES } from '@vizhaspace/shared';
 
 const router = Router();
 

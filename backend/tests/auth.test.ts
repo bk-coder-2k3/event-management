@@ -1,4 +1,4 @@
-import { registerSchema, loginSchema } from '@kalyanaconnect/shared';
+import { registerSchema, loginSchema } from '@vizhaspace/shared';
 
 describe('Auth Validation & RBAC Security Rules', () => {
   describe('Registration Schema', () => {

@@ -96,6 +96,7 @@ model Vendor {
   description        String
   startingPrice      Decimal?           @db.Decimal(12, 2)
   currency           String             @default("INR")
+  attributes         Json?
   address            String
   city               String
   district           String
@@ -168,6 +169,7 @@ model Enquiry {
   customerName   String
   customerEmail  String
   customerPhone  String
+  eventType      String?
   eventDate      DateTime?
   eventCity      String
   budgetMin      Decimal?      @db.Decimal(12, 2)

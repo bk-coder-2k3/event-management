@@ -1,7 +1,7 @@
 import { prisma } from '../../config/db';
 import { generateSlug } from '../../utils/slugify';
 import { BadRequestError, ConflictError, ForbiddenError, NotFoundError } from '../../utils/errors';
-import { APPROVAL_STATUSES, ROLES } from '@kalyanaconnect/shared';
+import { APPROVAL_STATUSES, ROLES } from '@vizhaspace/shared';
 import { storageService } from '../../services/storageService';
 import { Prisma } from '@prisma/client';
 
@@ -42,6 +42,7 @@ export class VendorsService {
         description: data.description.trim(),
         startingPrice: data.startingPrice !== undefined && data.startingPrice !== null ? data.startingPrice : null,
         currency: data.currency || 'INR',
+        attributes: data.attributes !== undefined ? data.attributes : null,
         address: data.address.trim(),
         city: data.city.trim(),
         district: data.district.trim(),

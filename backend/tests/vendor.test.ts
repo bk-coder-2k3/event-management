@@ -1,5 +1,5 @@
 import { generateSlug } from '../src/utils/slugify';
-import { adminVendorDecisionSchema, createVendorSchema } from '@kalyanaconnect/shared';
+import { adminVendorDecisionSchema, createVendorSchema } from '@vizhaspace/shared';
 
 describe('Vendor Logic & Approval Workflow Tests', () => {
   describe('Slug Generation', () => {

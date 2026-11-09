@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { UserRole } from '@kalyanaconnect/shared';
+import { UserRole } from '@vizhaspace/shared';
 import { ForbiddenError, UnauthorizedError } from '../utils/errors';
 
 export function requireRole(...allowedRoles: UserRole[]) {

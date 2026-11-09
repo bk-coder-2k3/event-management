@@ -1,5 +1,5 @@
 {
-  "name": "@kalyanaconnect/backend",
+  "name": "@vizhaspace/backend",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -15,7 +15,7 @@
     "test": "jest --detectOpenHandles --forceExit"
   },
   "dependencies": {
-    "@kalyanaconnect/shared": "file:../shared",
+    "@vizhaspace/shared": "file:../shared",
     "@prisma/client": "^6.4.1",
     "argon2": "^0.41.1",
     "cloudinary": "^2.5.1",

@@ -1,6 +1,6 @@
 import { Request } from 'express';
 import { prisma } from '../../config/db';
-import { APPROVAL_STATUSES, VERIFICATION_STATUSES } from '@kalyanaconnect/shared';
+import { APPROVAL_STATUSES, VERIFICATION_STATUSES } from '@vizhaspace/shared';
 import { NotFoundError } from '../../utils/errors';
 import { AuditService } from '../../services/auditService';
 

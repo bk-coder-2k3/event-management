@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import { env } from '../config/env';
-import { UserRole } from '@kalyanaconnect/shared';
+import { UserRole } from '@vizhaspace/shared';
 
 export interface AccessTokenPayload {
   userId: string;

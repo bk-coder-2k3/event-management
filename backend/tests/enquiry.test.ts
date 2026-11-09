@@ -1,4 +1,4 @@
-import { createEnquirySchema } from '@kalyanaconnect/shared';
+import { createEnquirySchema } from '@vizhaspace/shared';
 
 describe('Enquiry Management Validation', () => {
   it('should reject enquiry when minimum budget exceeds maximum budget', () => {

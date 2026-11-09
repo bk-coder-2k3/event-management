@@ -19,9 +19,9 @@ const envSchema = z.object({
   CLOUDINARY_CLOUD_NAME: z.string().optional().default(''),
   CLOUDINARY_API_KEY: z.string().optional().default(''),
   CLOUDINARY_API_SECRET: z.string().optional().default(''),
-  DEFAULT_ADMIN_EMAIL: z.string().default('admin@kalyanaconnect.com'),
+  DEFAULT_ADMIN_EMAIL: z.string().default('admin@vizhaspace.in'),
   DEFAULT_ADMIN_PASSWORD: z.string().default('AdminSecure#2026'),
-  DEFAULT_ADMIN_NAME: z.string().default('KalyanaConnect Platform Admin'),
+  DEFAULT_ADMIN_NAME: z.string().default('VizhaSpace Platform Admin'),
 });
 
 export const env = envSchema.parse(process.env);

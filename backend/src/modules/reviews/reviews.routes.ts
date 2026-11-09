@@ -3,7 +3,7 @@ import { ReviewsController } from './reviews.controller';
 import { authenticateJwt } from '../../middleware/auth';
 import { requireRole } from '../../middleware/rbac';
 import { validateBody } from '../../middleware/validate';
-import { createReviewSchema, moderateReviewSchema, ROLES } from '@kalyanaconnect/shared';
+import { createReviewSchema, moderateReviewSchema, ROLES } from '@vizhaspace/shared';
 
 const router = Router();
 

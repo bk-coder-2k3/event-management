@@ -1,6 +1,6 @@
 import { prisma } from '../../config/db';
 import { ConflictError, NotFoundError } from '../../utils/errors';
-import { APPROVAL_STATUSES, REVIEW_STATUSES } from '@kalyanaconnect/shared';
+import { APPROVAL_STATUSES, REVIEW_STATUSES } from '@vizhaspace/shared';
 
 export class ReviewsService {
   /**

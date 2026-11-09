@@ -7,7 +7,7 @@ import {
   createEnquirySchema,
   updateEnquiryStatusSchema,
   ROLES,
-} from '@kalyanaconnect/shared';
+} from '@vizhaspace/shared';
 import { enquiryLimiter } from '../../middleware/rateLimiter';
 
 const router = Router();

@@ -3,7 +3,7 @@ import { AdminController } from './admin.controller';
 import { authenticateJwt } from '../../middleware/auth';
 import { requireRole } from '../../middleware/rbac';
 import { validateBody } from '../../middleware/validate';
-import { adminVendorDecisionSchema, ROLES } from '@kalyanaconnect/shared';
+import { adminVendorDecisionSchema, ROLES } from '@vizhaspace/shared';
 
 const router = Router();
 

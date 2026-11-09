@@ -27,7 +27,14 @@ export function csrfProtection(req: Request, _res: Response, next: NextFunction)
   const allowedOrigins = [
     env.CLIENT_ORIGIN,
     'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
     'http://127.0.0.1:3000',
+    'https://vizhaspace.in',
+    'https://www.vizhaspace.in',
+    'https://vendor.vizhaspace.in',
+    'https://partners.vizhaspace.in',
+    'https://admin.vizhaspace.in',
     'https://kalyanaconnect.com',
   ];
 

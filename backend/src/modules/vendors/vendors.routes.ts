@@ -9,7 +9,7 @@ import {
   updateVendorSchema,
   vendorQuerySchema,
   ROLES,
-} from '@kalyanaconnect/shared';
+} from '@vizhaspace/shared';
 import { BadRequestError } from '../../utils/errors';
 
 const upload = multer({
@@ -77,7 +77,7 @@ import { PackagesController } from '../packages/packages.controller';
 import {
   createPackageSchema,
   updatePackageSchema,
-} from '@kalyanaconnect/shared';
+} from '@vizhaspace/shared';
 
 // Packages management
 router.post(

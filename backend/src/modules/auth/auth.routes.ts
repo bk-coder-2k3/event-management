@@ -7,7 +7,7 @@ import {
   forgotPasswordSchema,
   resetPasswordSchema,
   verifyEmailSchema,
-} from '@kalyanaconnect/shared';
+} from '@vizhaspace/shared';
 import { authenticateJwt } from '../../middleware/auth';
 import { authLimiter } from '../../middleware/rateLimiter';
 import { csrfProtection } from '../../middleware/csrf';

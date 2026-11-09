@@ -1,11 +1,15 @@
+import path from 'path';
+import dotenv from 'dotenv';
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
 import { PrismaClient } from '@prisma/client';
-import { INITIAL_CATEGORIES } from '@kalyanaconnect/shared';
+import { INITIAL_CATEGORIES } from '@vizhaspace/shared';
 import argon2 from 'argon2';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Starting KalyanaConnect database seed...');
+  console.log('🌱 Starting VizhaSpace (vizhaspace.in) database seed...');
 
   // 1. Seed Categories
   for (const cat of INITIAL_CATEGORIES) {
@@ -38,11 +42,13 @@ async function main() {
   });
 
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@kalyanaconnect.com' },
-    update: {},
+    where: { email: 'admin@vizhaspace.in' },
+    update: {
+      fullName: 'VizhaSpace Platform Admin',
+    },
     create: {
-      fullName: 'KalyanaConnect Platform Admin',
-      email: 'admin@kalyanaconnect.com',
+      fullName: 'VizhaSpace Platform Admin',
+      email: 'admin@vizhaspace.in',
       passwordHash: adminPasswordHash,
       role: 'ADMIN',
       status: 'ACTIVE',
@@ -94,6 +100,16 @@ async function main() {
       longitude: 78.1193,
       approvalStatus: 'APPROVED' as const,
       verificationStatus: 'VERIFIED' as const,
+      attributes: {
+        seatingCapacity: 1200,
+        diningCapacity: 500,
+        parkingCapacity: 100,
+        airConditioning: 'Centralized AC',
+        vegPolicy: 'Pure Veg Only',
+        roomsCount: 15,
+        generatorBackup: true,
+        homaKundamPermitted: true,
+      },
       images: [
         'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80',
         'https://images.unsplash.com/photo-1545232979-fbf68fe9b1af?auto=format&fit=crop&w=1200&q=80',
@@ -126,6 +142,14 @@ async function main() {
       longitude: 78.0982,
       approvalStatus: 'APPROVED' as const,
       verificationStatus: 'VERIFIED' as const,
+      attributes: {
+        photographyStyles: ['Candid Photography', 'Traditional Muhurtham', 'Cinematic Wedding Teasers', 'Pre-Wedding Shoot'],
+        deliverables: ['Full Raw Dump', 'Curated Edited Photos', '4K Cinematic Video', 'Premium Wedding Album'],
+        editedPhotosCount: 500,
+        deliveryTurnaroundDays: 25,
+        droneShoots: true,
+        teamSize: 4,
+      },
       images: [
         'https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=1200&q=80',
         'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=1200&q=80',
@@ -158,6 +182,14 @@ async function main() {
       longitude: 78.1345,
       approvalStatus: 'APPROVED' as const,
       verificationStatus: 'VERIFIED' as const,
+      attributes: {
+        minGuestCount: 150,
+        maxGuestCapacity: 3000,
+        serviceStyles: ['Traditional Plantain Leaf (Elai Sappadu)', 'Buffet Banquet'],
+        vegNonVeg: 'Pure Vegetarian',
+        liveStalls: ['Madurai Famous Jigarthanda', 'Filter Coffee Counter', 'Live Hot Dosa Counter'],
+        traditionalFeastItems: ['Madurai Kari Dosa (Mock)', 'Elaneer Payasam', 'Chettinad Kozhukattai', 'Special Medu Vada'],
+      },
       images: [
         'https://images.unsplash.com/photo-1610057099443-fde8c4d50f91?auto=format&fit=crop&w=1200&q=80',
         'https://images.unsplash.com/photo-1546833999-b9f581a1996d?auto=format&fit=crop&w=1200&q=80',
@@ -190,6 +222,13 @@ async function main() {
       longitude: 78.1567,
       approvalStatus: 'APPROVED' as const,
       verificationStatus: 'VERIFIED' as const,
+      attributes: {
+        decorThemes: ['Traditional Temple Floral Mandapam', 'Madurai Malli Grand Arches', 'Modern Pastel Reception Backdrop'],
+        flowerTypes: ['Madurai Malli (Jasmine)', 'Fresh Lotus', 'Marigold (Sevanthi)', 'Bangalore Roses'],
+        stageLighting: true,
+        entranceArchIncluded: true,
+        welcomeBoardIncluded: true,
+      },
       images: [
         'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1200&q=80',
       ],
@@ -221,6 +260,12 @@ async function main() {
       longitude: 78.0722,
       approvalStatus: 'APPROVED' as const,
       verificationStatus: 'VERIFIED' as const,
+      attributes: {
+        performanceFormats: ['Traditional Muhurtha Nadaswaram Ensemble', 'Mangala Vaathiyam'],
+        instruments: ['Nadaswaram', 'Thavil', 'Thalam', 'Shruti Box'],
+        troupeSize: 5,
+        receptionFusion: false,
+      },
       images: [
         'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80',
       ],
@@ -252,6 +297,14 @@ async function main() {
       longitude: 78.1456,
       approvalStatus: 'APPROVED' as const,
       verificationStatus: 'VERIFIED' as const,
+      attributes: {
+        makeupStyles: ['HD Bridal Makeup', 'Airbrush Makeup', 'Traditional South Indian Muhurtham'],
+        brandsUsed: ['MAC Cosmetics', 'Huda Beauty', 'Bobbi Brown', 'Dior Backstage'],
+        sareeDrapingIncluded: true,
+        hairStylingIncluded: true,
+        travelsToVenue: true,
+        trialsAvailable: true,
+      },
       images: [
         'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=1200&q=80',
       ],
@@ -261,6 +314,121 @@ async function main() {
           description: 'High-definition airbrush makeup, hair styling with fresh jasmine, and luxury saree draping.',
           price: 28000,
           inclusions: ['HD Airbrush Makeup', 'Hairstyling', 'Saree Draping', 'Jewellery Assistance', 'Touchup kit'],
+        },
+      ],
+    },
+    {
+      ownerEmail: 'meenakshi.silks@example.com',
+      ownerName: 'Selvi Meenakshi',
+      businessName: 'Madurai Meenakshi Silks & Heritage Kanchipuram',
+      slug: 'madurai-meenakshi-silks-heritage-kanchipuram',
+      categorySlug: 'bridal-wear',
+      description:
+        'Generations of authentic handloom heritage offering pure gold zari Kanchipuram Muhurtham silk sarees, Madurai sungudi pattu, bridal lehengas, and designer blouse embroidery styling.',
+      startingPrice: 25000,
+      address: '12, South Chithirai Street',
+      city: 'Madurai',
+      district: 'Madurai',
+      postalCode: '625001',
+      phone: '9842789012',
+      whatsappPhone: '9842789012',
+      latitude: 9.918,
+      longitude: 78.118,
+      approvalStatus: 'APPROVED' as const,
+      verificationStatus: 'VERIFIED' as const,
+      attributes: {
+        bridalWearTypes: ['Pure Kanchipuram Silk Sarees', 'Muhurtha Pattu', 'Madurai Sungudi Sarees'],
+        fabricSpecialties: ['Pure Zari (Gold & Silver)', 'Handloom Mulberry Silk', 'Aari Work Blouses'],
+        customBlouseTailoring: true,
+        matchingAccessoriesAvailable: true,
+        homeTryOn: false,
+      },
+      images: [
+        'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1200&q=80',
+      ],
+      packages: [
+        {
+          name: 'Royal Muhurtham Pattu Ensemble',
+          description: 'Pure handwoven Kanchipuram silk saree with handcrafted Aari work blouse tailoring.',
+          price: 45000,
+          inclusions: ['Pure Zari Kanchipuram Saree', 'Custom Aari Embroidery Blouse', 'Complimentary Draping Assistance'],
+        },
+      ],
+    },
+    {
+      ownerEmail: 'pandiya.planners@example.com',
+      ownerName: 'Saravanan Pandian',
+      businessName: 'Pandiya Heritage Destination & Wedding Planners',
+      slug: 'pandiya-heritage-destination-wedding-planners',
+      categorySlug: 'wedding-planners',
+      description:
+        'Premier full-service wedding production house in Southern Tamil Nadu orchestrating grand heritage weddings, temple muhurthams, logistics, Vedic priest coordination, and hospitality.',
+      startingPrice: 150000,
+      address: '104, Kamarajar Salai',
+      city: 'Madurai',
+      district: 'Madurai',
+      postalCode: '625009',
+      phone: '9842890123',
+      whatsappPhone: '9842890123',
+      latitude: 9.9145,
+      longitude: 78.132,
+      approvalStatus: 'APPROVED' as const,
+      verificationStatus: 'VERIFIED' as const,
+      attributes: {
+        planningScope: ['Full End-to-End Planning', 'Day-Of Coordination', 'Vendor Management'],
+        guestCapacityHandled: 3000,
+        destinationWeddings: true,
+        budgetManagement: true,
+        priestCoordination: true,
+        yearsExperience: 14,
+      },
+      images: [
+        'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200&q=80',
+      ],
+      packages: [
+        {
+          name: 'End-to-End Grand Muhurtham Production',
+          description: 'Complete management from vendor negotiations, guest hospitality, priest rituals to stage execution.',
+          price: 250000,
+          inclusions: ['Dedicated 8-member team', 'Logistics coordination', 'Hospitality desk', 'Decor & Catering supervision'],
+        },
+      ],
+    },
+    {
+      ownerEmail: 'meenakshi.cards@example.com',
+      ownerName: 'Ganesan S',
+      businessName: 'Meenakshi Royal Eco Wedding Cards & Invites',
+      slug: 'meenakshi-royal-eco-wedding-cards-invites',
+      categorySlug: 'invitations',
+      description:
+        'Crafting exquisite traditional Tamil wedding invitation cards, luxury padded box cards with Thamboolam bags, plantable eco-seed paper invites, and interactive digital video invitations.',
+      startingPrice: 40,
+      address: '55, Town Hall Road',
+      city: 'Madurai',
+      district: 'Madurai',
+      postalCode: '625001',
+      phone: '9842901234',
+      whatsappPhone: '9842901234',
+      latitude: 9.9172,
+      longitude: 78.1154,
+      approvalStatus: 'APPROVED' as const,
+      verificationStatus: 'VERIFIED' as const,
+      attributes: {
+        invitationTypes: ['Traditional Tamil Box Cards', 'Plantable Seed Paper Cards', 'Digital Video Invitations', 'Laser Cut Cards'],
+        printingMethods: ['Gold Foil Stamping', 'Embossing', 'Screen Printing', 'UV Printing'],
+        minOrderQuantity: 100,
+        deliveryDays: 7,
+        customTamilWordingAssistance: true,
+      },
+      images: [
+        'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1200&q=80',
+      ],
+      packages: [
+        {
+          name: 'Royal Gold Foil Box Invitation Set',
+          description: 'Hardbound box card with embossed Ganesha / Meenakshi emblem, 2 inner inserts, and matching sweets box.',
+          price: 180,
+          inclusions: ['Premium Textured Box', 'Gold Foil Stamping', '2 Inserts', 'Custom Tamil Calligraphy Proofing'],
         },
       ],
     },
@@ -298,6 +466,7 @@ async function main() {
       where: { slug: vData.slug },
       update: {
         startingPrice: vData.startingPrice,
+        attributes: vData.attributes,
         approvalStatus: vData.approvalStatus,
         verificationStatus: vData.verificationStatus,
       },
@@ -309,6 +478,7 @@ async function main() {
         description: vData.description,
         startingPrice: vData.startingPrice,
         currency: 'INR',
+        attributes: vData.attributes,
         address: vData.address,
         city: vData.city,
         district: vData.district,
@@ -386,7 +556,55 @@ async function main() {
     }
   }
 
-  console.log('✅ Seed completed successfully with Madurai wedding vendors, packages & verified reviews!');
+  // Seed sample multi-event enquiries for testing
+  const firstVendor = await prisma.vendor.findFirst({ where: { slug: 'sri-meenakshi-sundareswarar-kalyana-mandapam' } });
+  if (firstVendor) {
+    const existingBirthdayEnquiry = await prisma.enquiry.findFirst({
+      where: { vendorId: firstVendor.id, customerEmail: 'priya.events@example.com' },
+    });
+    if (!existingBirthdayEnquiry) {
+      await prisma.enquiry.create({
+        data: {
+          vendorId: firstVendor.id,
+          customerUserId: customer.id,
+          customerName: 'Priya Narayanan',
+          customerEmail: 'priya.events@example.com',
+          customerPhone: '9842199887',
+          eventType: 'Birthday Party & Milestone Celebration',
+          eventCity: 'Madurai',
+          eventDate: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+          budgetMin: 50000,
+          budgetMax: 100000,
+          requirements: 'Looking for dining hall and stage for 1st Birthday celebration with 250 guests. Need balloon decoration and buffet dining setup.',
+          status: 'NEW',
+        },
+      });
+    }
+
+    const existingCorpEnquiry = await prisma.enquiry.findFirst({
+      where: { vendorId: firstVendor.id, customerEmail: 'suresh.tech@example.com' },
+    });
+    if (!existingCorpEnquiry) {
+      await prisma.enquiry.create({
+        data: {
+          vendorId: firstVendor.id,
+          customerUserId: customer.id,
+          customerName: 'Suresh Kumar (TechCon Solutions)',
+          customerEmail: 'suresh.tech@example.com',
+          customerPhone: '9842177665',
+          eventType: 'Corporate Event & Conference',
+          eventCity: 'Madurai',
+          eventDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          budgetMin: 120000,
+          budgetMax: 200000,
+          requirements: 'Annual company conference and tech summit for 400 delegates. Centralized AC hall, projector AV sound, and high-tea catering required.',
+          status: 'CONTACTED',
+        },
+      });
+    }
+  }
+
+  console.log('✅ Seed completed successfully with all-event categories, vendors, packages & multi-event enquiries!');
 }
 
 main()

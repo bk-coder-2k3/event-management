@@ -1,6 +1,6 @@
 import { prisma } from '../../config/db';
 import { ForbiddenError, NotFoundError } from '../../utils/errors';
-import { APPROVAL_STATUSES, ROLES } from '@kalyanaconnect/shared';
+import { APPROVAL_STATUSES, ROLES } from '@vizhaspace/shared';
 
 export class EnquiriesService {
   /**
@@ -27,6 +27,7 @@ export class EnquiriesService {
         customerName: data.customerName.trim(),
         customerEmail: data.customerEmail.toLowerCase().trim(),
         customerPhone: data.customerPhone.trim(),
+        eventType: data.eventType?.trim() || null,
         eventDate: data.eventDate ? new Date(data.eventDate) : null,
         eventCity: data.eventCity.trim(),
         budgetMin: data.budgetMin ?? null,

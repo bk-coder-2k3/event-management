@@ -1,19 +1,43 @@
-# KalyanaConnect — Production-Ready Wedding Vendor Marketplace
+# VizhaSpace (vizhaspace.in) — Tamil Nadu All-Event & Wedding Marketplace
 
-> **"Find Your Perfect Wedding Team."**  
-> A full-stack, responsive wedding services marketplace designed for Tamil Nadu, India (starting with Madurai and architected for expansion to Theni, Coimbatore, Chennai, and all 38 districts).
+> **"Book Trusted Venues & Event Professionals Across Tamil Nadu."**  
+> A full-stack, enterprise monorepo marketplace powering events, weddings, corporate functions, birthdays, and cultural gatherings across all 38 districts of Tamil Nadu.
 
 ---
 
 ## 🌟 Highlights & Architecture
 
-KalyanaConnect provides a high-trust digital marketplace connecting couples with verified wedding professionals (Kalyana Mandapams, candid muhurtham photographers, authentic banana-leaf caterers, stage decorators, Nadaswaram troupes, and bridal stylists).
+VizhaSpace (`vizhaspace.in`) provides a verified digital ecosystem connecting families, planners, and corporate organizers with vetted event professionals (Kalyana Mandapams, banquet halls, mini-halls, photographers, caterers, stage decorators, audio-lighting specialists, Nadaswaram troupes, makeup stylists, DJ & MCs, and event coordinators).
 
-### Individual Sub-Portals & Isolation:
-- **Public Marketplace (`/`, `/vendors`, `/vendors/[slug]`, `/categories/[slug]`):** Warm ivory, burgundy, and champagne-gold aesthetic with district-level database filtering, price sorting, package breakdowns, and verified reviews.
-- **Customer Portal (`/customer/*`):** Dedicated customer dashboard, enquiry tracker with real-time status badges, wishlist bookmarks, and personal profile manager.
-- **Vendor Partner Portal (`/vendor/*`):** Dedicated vendor layout with business approval state banner, service package editor, high-resolution photo gallery upload, and enquiry inbox with one-click WhatsApp client replies.
-- **Admin Control Center (`/admin/*`):** Executive dark burgundy console featuring real-time KPI metrics, pending vendor review queue with mandatory rejection rationale, verification badge toggling, user account suspension, category manager, review moderation, and security audit logs.
+### Multi-App Architecture:
+- **Customer Marketplace (`apps/customer` - `http://localhost:3000` / `https://vizhaspace.in`):**
+  - Warm ivory, burgundy, and champagne-gold theme.
+  - Event-type filtering (Weddings, Receptions, Betrothals, Birthdays, Corporate, Baby Showers, Housewarmings, etc.).
+  - Tamil Nadu district filtering (Chennai, Coimbatore, Madurai, Trichy, Salem, Tirunelveli, and all 38 districts).
+  - Category-specific technical specifications (AC/Non-AC dining capacity, muhurtham rooms, drone coverage, veg/non-veg buffet, sound decibel limits).
+  - Enquiry modals with pre-formatted WhatsApp direct contact.
+  - Customer wishlist & enquiry management.
+
+- **Vendor Partner Portal (`apps/vendor` - `http://localhost:3001` / `https://vendor.vizhaspace.in`):**
+  - Vendor onboarding & profile management with category-specific configurations.
+  - Dynamic packages builder with pricing and deliverables.
+  - Photo gallery upload with category tagging.
+  - Lead & enquiry tracking with one-click WhatsApp client follow-up.
+  - Verification & review badge status.
+
+- **Admin Control Center (`apps/admin` - `http://localhost:3002` / `https://admin.vizhaspace.in`):**
+  - Executive control center with real-time analytics.
+  - Vendor onboarding approval queue with mandatory rejection rationale.
+  - Category manager with custom attributes & pricing units.
+  - Review moderation and user account management.
+  - Security audit logs with IP & User-Agent capture.
+
+- **Backend API (`backend` - `http://localhost:5000/api/v1`):**
+  - High-performance Express.js REST API with Prisma ORM.
+  - Argon2id password security with brute-force rate limiting.
+  - Rotating refresh token security with instant session revocation on reuse.
+  - RBAC authorization (`CUSTOMER`, `VENDOR`, `ADMIN`).
+  - Strict CORS allowlist supporting `vizhaspace.in` subdomains.
 
 ---
 
@@ -21,11 +45,12 @@ KalyanaConnect provides a high-trust digital marketplace connecting couples with
 
 | Layer | Technology |
 |---|---|
-| **Frontend** | Next.js 15 (App Router), React 19, TypeScript (Strict), Tailwind CSS, Lucide Icons, React Hook Form, Zod |
-| **Backend** | Node.js, Express.js, TypeScript, REST API (`/api/v1`), Zod validation, Helmet, CORS allowlist, Express Rate Limit, Pino structured logging |
-| **Database** | PostgreSQL, Prisma ORM, versioned migrations, Decimal types for monetary amounts, unique constraints, and audit logs |
-| **Authentication** | JWT access tokens (15m in memory), rotating refresh tokens (7d) in HttpOnly cookies, SHA-256 token hashes in DB, session reuse detection, Argon2id password hashing |
-| **Storage** | Pluggable storage abstraction (`LocalStorageService` with local static serving fallback + `CloudinaryStorageService`) |
+| **Monorepo** | npm Workspaces (`@vizhaspace/shared`, `@vizhaspace/backend`, `@vizhaspace/customer`, `@vizhaspace/vendor`, `@vizhaspace/admin`) |
+| **Frontend Apps** | Next.js 15 (App Router), React 19, TypeScript (Strict), Tailwind CSS, Lucide Icons |
+| **Backend API** | Node.js, Express.js, TypeScript, REST API (`/api/v1`), Zod validation, Helmet, CORS, Express Rate Limit, Pino logger |
+| **Database** | PostgreSQL (Supabase / Local), Prisma ORM, migrations & seeds |
+| **Authentication** | JWT access tokens (15m in memory), rotating refresh tokens (7d) in HttpOnly cookies, SHA-256 hash checks, Argon2id passwords |
+| **Storage** | Local disk storage fallback + Cloudinary integration |
 
 ---
 
@@ -33,112 +58,66 @@ KalyanaConnect provides a high-trust digital marketplace connecting couples with
 
 ```
 KalyanaConnect/
-├── shared/                       # Shared TypeScript types, Zod schemas, & constants
-│   ├── src/constants/            # Roles, enquiry statuses, Tamil Nadu districts
-│   ├── src/types/                # User, Vendor, Package, Enquiry, Review interfaces
-│   └── src/validators/           # Shared Zod validation schemas
+├── apps/
+│   ├── customer/                 # Next.js 15 customer marketplace (vizhaspace.in)
+│   ├── vendor/                   # Next.js 15 vendor portal (vendor.vizhaspace.in)
+│   └── admin/                    # Next.js 15 admin center (admin.vizhaspace.in)
 ├── backend/                      # Express.js REST API
 │   ├── prisma/
-│   │   ├── schema.prisma         # Normalized PostgreSQL schema
-│   │   └── seed.ts               # Madurai wedding categories & demo data
-│   ├── src/
-│   │   ├── config/               # Environment, database, logger, CORS
-│   │   ├── middleware/           # Auth, RBAC, CSRF, rate limiters, error handler
-│   │   ├── modules/              # Auth, vendors, categories, packages, enquiries, reviews, admin
-│   │   ├── services/             # Storage, Token, Password (Argon2id), Audit log
-│   │   ├── bootstrap-admin.ts    # Controlled CLI admin bootstrap
-│   │   └── app.ts / server.ts    # Express application setup
+│   │   ├── schema.prisma         # PostgreSQL schema
+│   │   └── seed.ts               # Event categories, admin & sample vendors
+│   ├── src/                      # Controllers, routes, middleware, services
 │   └── tests/                    # Jest automated test suites
-├── frontend/                     # Next.js 15 App Router application
-│   ├── src/
-│   │   ├── app/                  # Public routes, /customer/*, /vendor/*, /admin/*
-│   │   ├── components/           # UI primitives, layout navbar/footer, marketplace cards
-│   │   ├── features/auth/        # AuthContext and useAuth hook
-│   │   └── lib/api-client.ts     # Typed API client with auto-refresh & cookie handling
-├── docs/                         # Architecture, API specifications, and security checklist
-├── docker-compose.yml            # PostgreSQL 16 container setup
-└── README.md
+├── shared/                       # Shared TypeScript types, Zod schemas, & constants
+├── docker-compose.yml            # Local PostgreSQL 16 container setup
+└── package.json                  # Root monorepo scripts & dependencies
 ```
 
 ---
 
 ## 🚀 Quickstart Guide
 
-### 1. Prerequisites
-- **Node.js:** `v20+` or `v24+`
-- **npm:** `v10+` or `v11+`
-- **PostgreSQL:** Running locally on port `5432` or via Docker Compose.
-
-### 2. Start PostgreSQL (Docker option)
+### 1. Install Dependencies & Build Shared Library
 ```bash
-docker compose up -d
-```
-
-### 3. Install Dependencies & Build Shared Library
-```bash
-# In root directory:
+npm install
 npm run build:shared
 ```
 
-### 4. Setup Database & Seed Initial Categories
+### 2. Setup Database & Seed
 ```bash
-# Generate Prisma Client:
-npm run prisma:generate --workspace=backend
-
-# Push schema to PostgreSQL:
+# Push schema to PostgreSQL (Supabase or local):
 npm run db:push --workspace=backend
 
-# Seed Tamil Nadu categories, Madurai sample vendors, and initial reviews:
+# Seed Tamil Nadu event categories, admin credentials, and sample vendors:
 npm run db:seed --workspace=backend
 ```
 
-### 5. Secure Admin Bootstrap
-```bash
-# Elevates or creates initial platform administrator:
-npm run bootstrap:admin --workspace=backend
-```
-*Default bootstrap credentials (configurable in `.env`):*
-- **Email:** `admin@kalyanaconnect.com`
+*Default Admin Credentials:*
+- **Email:** `admin@vizhaspace.in`
 - **Password:** `AdminSecure#2026`
 
-### 6. Run Development Servers
+### 3. Run Development Servers
 ```bash
-# Run both Backend (Port 5000) and Frontend (Port 3000) concurrently:
+# Start all services concurrently:
 npm run dev
+
+# Or start specific services:
+npm run dev:backend   # Port 5000
+npm run dev:customer  # Port 3000
+npm run dev:vendor    # Port 3001
+npm run dev:admin     # Port 3002
 ```
-- **Frontend URL:** `http://localhost:3000`
-- **Backend API URL:** `http://localhost:5000/api/v1`
-- **Health Check:** `http://localhost:5000/health`
-- **Database Readiness:** `http://localhost:5000/ready`
+
+### 4. Build All Services for Production
+```bash
+npm run build
+```
 
 ---
 
 ## 🧪 Automated Testing
 
-Run the automated test suite covering Argon2id password security, JWT & refresh token reuse detection, RBAC privilege protection, vendor approval workflows, and enquiry validations:
-
 ```bash
 npm run test:backend
 ```
-
-**Test Verification Summary:**
-```
-PASS tests/vendor.test.ts
-PASS tests/security.test.ts
-PASS tests/auth.test.ts
-PASS tests/enquiry.test.ts
-
-Test Suites: 4 passed, 4 total
-Tests:       17 passed, 17 total
-Snapshots:   0 total
-```
-
----
-
-## 🔒 Security Architecture Highlights
-
-1. **No Admin Self-Registration:** Registration endpoint explicitly rejects the `ADMIN` role.
-2. **Rotating Refresh Tokens:** Rotated on every use. Detection of replaced session hashes triggers instant user-wide session revocation.
-3. **Argon2id Passwords:** High memory & time cost resistant to GPU cracking.
-4. **Isolated Dashboards:** Frontend `AuthGuard` paired with backend Express `requireRole` middleware.
-5. **Audit Logging:** Destructive or privileged actions (suspensions, vendor approvals, rejections) are saved to the `AuditLog` table with remote IP and user agent.
+*17/17 automated test suites passing.*

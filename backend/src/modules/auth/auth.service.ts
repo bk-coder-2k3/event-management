@@ -2,7 +2,7 @@ import { prisma } from '../../config/db';
 import { PasswordService } from '../../services/passwordService';
 import { TokenService } from '../../services/tokenService';
 import { BadRequestError, ConflictError, NotFoundError, UnauthorizedError } from '../../utils/errors';
-import { ROLES, UserRole } from '@kalyanaconnect/shared';
+import { ROLES, UserRole } from '@vizhaspace/shared';
 import { env } from '../../config/env';
 import { logger } from '../../config/logger';
 import { v4 as uuidv4 } from 'uuid';
